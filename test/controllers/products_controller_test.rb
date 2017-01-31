@@ -1,7 +1,11 @@
 require 'test_helper'
 
-class ProductsControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
+class ProductsControllerTest < ApplicationController 
+  
+   def get_products
+    @products = Product.all
+    render "products.html.erb"
+  end# test "the truth" do
   #   assert true
   # end
 end

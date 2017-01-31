@@ -1,0 +1,31 @@
+<p>Name:<%= @product.name_product %></p>
+
+  <p>Name: <%= @product.name_product %></p>
+  <p>Price: <%= @product.Price %></p>
+  <p>Decription: <%= @product.description %></p>
+  <p>Image: <%= @product.image %></p>
+  <p>Description 
+  <ul>
+  <% @product.description_list.each do |description|%>
+	<li><%= description %></li>
+	<% end %>
+	</ul>
+	</p>
+	
+	<p>
+	Price:
+	<ol>
+	<% @product.price_list.each do |price| %>
+	<li><%= price %></li>
+	<%=end %>
+	</ol>
+
+	poduct time: <%= @product.friendly_product_time %></p>
+	Created at: <%=@product.friendly_product_time %></p>
+
+
+  <a class="btn btn-default" href="/product/<%= @product.id %>/edit" role="button">Edit</a>
+
+  <%= form_tag "/product/#{@product.id}", method: :delete do %>
+  <input class="btn btn-default" type="submit" value="Destroy product">
+<% end %>

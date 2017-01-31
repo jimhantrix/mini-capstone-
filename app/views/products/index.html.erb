@@ -1,0 +1,21 @@
+<div class="jumbotron text-center">
+  <h1>All Products</h1>
+</div>
+
+<% @Products.each_slice(3) do |three_recipes| %>
+  <div class="row">
+    <% three_recipes.each do |recipe| %>
+      <div class="col-md-4 col-sm-4">
+        <div class="well">
+          <h2>Title: <a href="/recipes/<%= recipe.id %>"><%= recipe.title %></a></h2>
+          <p>Chef: <%= recipe.chef %></p>
+          <p>Ingredients: <%= recipe.ingredients %></p>
+          <p>Directions: <%= recipe.directions %></p>
+          <p>Prep time: <%= recipe.prep_time %></p>
+          <img src="<%= recipe.image %>" alt=""><br>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+  
