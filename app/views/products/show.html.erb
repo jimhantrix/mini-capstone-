@@ -1,31 +1,43 @@
-<p>Name:<%= @product.name_product %></p>
+<section>
+    <div class="row">  
 
-  <p>Name: <%= @product.name_product %></p>
-  <p>Price: <%= @product.Price %></p>
-  <p>Decription: <%= @product.description %></p>
-  <p>Image: <%= @product.image %></p>
-  <p>Description 
-  <ul>
-  <% @product.description_list.each do |description|%>
-	<li><%= description %></li>
-	<% end %>
-	</ul>
-	</p>
-	
-	<p>
-	Price:
-	<ol>
-	<% @product.price_list.each do |price| %>
-	<li><%= price %></li>
-	<%=end %>
-	</ol>
+      <div class="col-sm-8 col-sm-offset-2">
 
-	poduct time: <%= @product.friendly_product_time %></p>
-	Created at: <%=@product.friendly_product_time %></p>
+        <div class="product_single">
+
+            <h2><%= @product.name %></h2>
+            <span><p>Supplied by: <%= @supplier.name %></p></span>
+
+            
+            <p>Price: <%= @product.price %></p>
+            <% @images.each do |image| %>
+            <img src ="image.url %>" alt ="<%= @product.name%>" class = "img_responsive">
+            <%end %>
+
+            <p>Description: <%= @product.description %></p>
+            <% if current_user && current_user.admin %>
 
 
-  <a class="btn btn-default" href="/product/<%= @product.id %>/edit" role="button">Edit</a>
 
-  <%= form_tag "/product/#{@product.id}", method: :delete do %>
-  <input class="btn btn-default" type="submit" value="Destroy product">
-<% end %>
+
+            <%= link_to "Edit", "/products/#{@product.id}/edit", class: "btn btn-success" %>
+            <%= link_to "Delete", "/products/#{@product.id}", {method: :delete, class: "btn btn-danger" }%>
+
+            <% end %>
+
+            <% form_tag "/orders", :method :post do %>
+            <div>
+            <%= label_tag :quantity %>
+
+            <%= text_field_tag :quantity %>
+
+           
+            <%= hidden_feild_tag :product_id,product.id%>
+            <%submit_tag "Add to cart"%>
+    
+            </div>
+        <%end%> 
+        </div>
+      </div>
+    </div>
+  </section>

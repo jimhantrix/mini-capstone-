@@ -1,78 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CookbookApp</title>
+  <title>Welcome to foodporn</title>
+  
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <link href='http://fonts.googleapis.com/css?family=Love+Ya+Like+A+Sister' rel='stylesheet' type='text/css'>
 </head>
 <body>
-
-<nav class="navbar navbar-default navbar-fixed-top">
+<header>
+<nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/recipes">cookr</a>
+      <a class="navbar-brand" href="/products"><img src="http://socializedsoftware.com/wp-content/uploads/2010/08/configuration-management-gears.png" alt="Logo & Home" class="img-responsive center-block"></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="/recipes/new">New Recipe <span class="sr-only">(current)</span></a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sort By <span class="caret"></span></a>
-
-
-          <ul class="dropdown-menu">
-            <li><a href="/recipes?sort=chef">Action</a></li>
-            <li><a href="/recipes?sort=prep_time">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="recipes?sort=title">One more separated link</a></li>
-          </ul>
-        </li>
+        <li><h1>Nerd Junk-tion</h1></li>
       </ul>
-      <%form_tag "/search",method: :post do %>
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="find a recipe" name="search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
+
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
+
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></span></a>
+
+          <% if current_user && current_user.admin %>
+
+
+           <%if current_user && current_user.admin %>
+          <li><%= link_to "Add New Product", "products/new", class: "btn btn-default" %></li>
+
+          <% end %>
+
+            <%Category.all.each do|category| %>
+            <li><a href ="/products/category
+              <%category.name%></a>
+
+            <% end %>
+            
+            
+            <li class="divider"></li>
+            <li><a href="/logout">Logout</a></li>
+          </li>
+
+
+
           </ul>
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-
-<% flash.each do |key, message| %>
-  <div class="alert alert-<%= key %> alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-  <%= message %>
-  </div>
-<% end %>
-
+</header>
 <div class="container-fluid">
-  <%= yield %>
+<% flash.each do |name, message| %>
+  <div class="alert alert-<%= name %> alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><p><%= message %></p>
+  </div>
+  <% end %>
+<%= yield %>
 </div>
-
 </body>
 </html>

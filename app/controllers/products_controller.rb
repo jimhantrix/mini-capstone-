@@ -1,88 +1,74 @@
+
 class ProductsController < ApplicationController
 
+  before_action aunthenticate_admin: except:[]
+  
+  def index
+    @cart_count = current_user.carted_products.where(status: carted )
 
-	def index
-	    @products = Products.all 
-	    sort_attr = params[:sort]
-
-	    sort_order = params[:sort_order]
-	    if sort_attr
-	      @Products =Products.all.order 
-	      (params[:sort] => params[:sort_order])
-	    if params[:quick]
-	      @products= Products.where("prep_time < ?", 60)
-	    end  
-
-		    render "index.html.erb"
-		    # Add a link that allows the user to see products in order of price, lowest to highest.  
-	end
-
-	def search 
-	    search_term = params[:search]
-	    @recipes = Recipes.where ("title LIKE ?","%#{search_term}%")
-	    render :index
-	end 
+    if session[:count] == nil
+      session[:count] = 0
+    end
+    session[:count] += 1 
+    @visit_count = session[:count]
+    @products = Product.all
+    if params[:category]
+      @products = Category.find_by(name: params[:category]).products
+    end 
+  end
 
 
 
-	  def new
-	    render "new.html.erb"
-	  end
+  def new
+  if current_user && current_user.admin
+  redirect_to "/" 
+  end
 
-	  def create
-	    recipe = Product.create(
-	    :name params[:name],
-	    :price params[:price],
-	   	:description params[:description],
-	    :image params[:image], 
-	    flash[:success] = "Product successfully created!"
-	    redirect_to "/products/#{product.id}"
-	  end
+  def create
+    @product = Product.create(
+      name: params[:name],
+      description: params[:description],
+      price: params[:price],
+      supplier_id: params[:supplier]['supplier_id']
+      )
+    @product.images.create(url: params[:image], product_id: @product.id)
 
+    flash[:success] = "Product Created"
+    redirect_to "/products/#{@product.id}"
+  end
 
+  def show
+    @product = Product.find_by(id: params[:id])
+    #returns single instance supplier hash
+    @supplier = @product.supplier
+    #returns array with image hashes
+    @images = @product.images
+  end
 
+  def edit
+    @product = Product.find_by(id: params[:id])
+  end
 
+  def update
+    @product = Product.find_by(id: params[:id])
+    @product.update(
+      name: params[:name],
+      description: params[:description],
+      image: params[:image],
+      price: params[:price],
+      supplier_id: params[:supplier_id]
+      )
 
+    flash[:success] = "Product Updated"
+    redirect_to "/products/#{@product.id}"
+  end
 
-	  def show
-	    product_id = params[:id]
-	    @product = Product.find_by(id: recipe_id)
-	    render "show.html.erb"
+  def destroy
+    @product = Product.find_by(id: params[:id])
+    @product.destroy
 
-	    if product_id == "random"
-	      @product = product.all.sample 
-	  end
-
-
-
-	  	def edit
-		   product_id = params[:id]
-		    @product = Product.find_by(id: product_id)
-		    render "edit.html.erb"
-	  	end
-
-
-
-
-
-	  	def update
-		   product_id = params[:id]
-		    product = Product.find_by(id: product_id)
-		    product.update(name: params[:name],
-		      price: params[:price],
-		      description: params[:description],
-		      image: params[:image],
-		      
-		    flash[:success] = "Product successfully updated!"
-		    redirect_to "/products/#{product.id}"
-	  	end
-
-	  def destroy
-	    product_id= params[:id]
-	   product = Product.find_by(id: product_id)
-	    Product.destroy
-	    flash[:warning] = "Product successfully deleted!"
-	    redirect_to "/products"
-	  end
-
+    flash[:warning] = "Product Destroyed"
+    redirect_to "/"
+  end
 end
+
